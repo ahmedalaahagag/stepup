@@ -3,4 +3,7 @@ define('DB_NAME','stepup');
 define('DB_USERNAME','root');
 define('DB_PASSWORD','');
 define('DB_HOST','localhost');
+define('CLIENTID','O6b65XArGQDrZLff2rAL79Up3Y31e57T');
+define('CLIENTSECRET','NBqfi9hEpAFP81q6tRgsJuUAZ2MD5xeSznf103w0Yo96qF4UKv4B7sQV2fqi7qDQ');
+define('GRANTTYPE','authorization_code');
 ?>

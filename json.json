@@ -1,5 +1,5 @@
 [{
-  "date": "20130315",
+  "date": "20151226",
   "summary": [
     {
       "activity": "walking",
@@ -52,7 +52,7 @@
   "lastUpdate": "20130317T121143Z"
 },
   {
-    "date": "20130316",
+    "date": "20151227",
     "summary": [
       {
         "activity": "walking",
@@ -75,7 +75,7 @@
     "lastUpdate": "20130317T121143Z"
   },
   {
-    "date": "20130317",
+    "date": "20151228",
     "summary": null,
-    "caloriesIdle": 1785
+    "caloriesIdle": 0
   }]

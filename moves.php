@@ -8,58 +8,81 @@
  */
 class moves
 {
-private $action ;
-private $date ;
-private $period ;
-private $distance;
-private $duration;
-private $steps;
-private $api;
+    private $action;
+    private $date;
+    private $period;
+    private $distance;
+    private $duration;
+    private $steps;
+    private $api;
+    private $userID;
 
-    function __construct($api) {
-    $this->api = $api;
-    }
 
-    private function getSummary($period,$date)
+
+    private function getSummary($period, $date)
     {
         $this->setAction('summary');
         $this->setPeriod($period);
         $this->setDate($date);
-        $summary = $this->api->getRequest($this->action,$this->period,$this->date);
+        $summary = $this->api->getRequest($this->action, $this->period, $this->date);
         return $summary;
     }
 
-    public function getWalkingActivity ($period,$date)
+    public function getWalkingActivity($period, $date)
     {
+        $walkingActivitesArray = array();
+        $summary = $this->getSummary($period, $date);
+        foreach ($summary as $dailySummary) {
+            $readableDate = implode("-", str_split($dailySummary->date, 4));
+            $readableDate = implode("-", str_split($readableDate, 7));
+            if (isset($dailySummary->summary)) {
+                foreach ($dailySummary->summary as $activity) {
 
-    $walkingActivitesArray = array();
-    $summary = $this->getSummary($period,$date);
-        foreach($summary as $dailySummary)
-        {
-                $readableDate = implode("-", str_split($dailySummary->date , 4));
-                $readableDate = implode("-", str_split($readableDate , 7));
-                if(isset($dailySummary->summary)){
-                foreach($dailySummary->summary as $activity)
-                {
-
-                        if(isset($activity->group) && $activity->group == 'walking'){
-                            $walkingActivites ['activity']= 'walking';
-                            $walkingActivites ['date']= $readableDate;
-                            $walkingActivites ['duration']= $activity->duration;
-                            $walkingActivites ['steps']= $activity->steps;
-                            $walkingActivites ['distance']= $activity->distance;
-                            $walkingActivitesArray[$dailySummary->date][]=$walkingActivites;
-                        }
+                    if (isset($activity->group) && $activity->group == 'walking') {
+                        $walkingActivites ['activity'] = 'walking';
+                        $walkingActivites ['date'] = $readableDate;
+                        $walkingActivites ['duration'] = $activity->duration;
+                        $walkingActivites ['steps'] = $activity->steps;
+                        $walkingActivites ['distance'] = $activity->distance;
+                        $walkingActivites ['user_id'] = $this->userID;
+                        $walkingActivitesArray[] = $walkingActivites;
+                    }
                 }
-                }
+            }
         }
         return $walkingActivitesArray;
     }
 
-    public function saveWalkingActivty($walkingActivity)
+    public function getActivities($period, $date)
     {
-
+        $dailyActivitesArray = array();
+        $summary = $this->getSummary($period, $date);
+        foreach ($summary as $dailySummary) {
+            $readableDate = implode("-", str_split($dailySummary->date, 4));
+            $readableDate = implode("-", str_split($readableDate, 7));
+            if (isset($dailySummary->summary)) {
+                foreach ($dailySummary->summary as $activity) {
+                    if (isset($activity->activity)) {
+                        $dailyActivites ['activity'] = $activity->activity;
+                        $dailyActivites ['date'] = $readableDate;
+                        if(isset($activity->steps))
+                            $dailyActivites ['steps'] = $activity->steps;
+                        else
+                            $dailyActivites ['steps'] = 0;
+                        $dailyActivites ['duration'] = $activity->duration;
+                        if(isset($activity->steps))
+                            $dailyActivites ['distance'] = $activity->distance;
+                        else
+                            $dailyActivites ['distance'] = 0;
+                        $dailyActivites ['user_id'] = $this->userID;
+                        $dailyActivitesArray[] = $dailyActivites;
+                    }
+                }
+            }
+        }
+        return $dailyActivitesArray;
     }
+
     /**
      * @return mixed
      */
@@ -156,6 +179,26 @@ private $api;
         $this->period = $period;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getuserID()
+    {
+        return $this->userID;
+    }
+
+    /**
+     * @param mixed $userid
+     */
+    public function setuserID($userID)
+    {
+        $this->userID = $userID;
+    }
+
+    function __construct($api)
+    {
+        $this->api = $api;
+    }
 
 
 }
