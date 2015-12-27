@@ -20,7 +20,9 @@ class api
     public function getRequest($action, $period, $date)
     {
         $url = $this->forgeURL($action, $period, $date);
+        // Change to json.json for more data
         $response = $this->returnResponse($url);
+        //$response = $this->returnResponse('json.json');
         return $response;
     }
 
