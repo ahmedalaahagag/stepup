@@ -1,1 +1,0 @@
-Stepup is an application that allows moves api to calculate your activites and give you a summery of it 
